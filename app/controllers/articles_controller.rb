@@ -1,33 +1,47 @@
 class ArticlesController < ApplicationController
-  def show
-    @article = Article.find(params[:id])
-  end
+    before_action :set_articles, only: [:show, :edit, :update, :destroy]
+    def show
+    end
 
-  def index
-    @articles = Article.all
-  end
+    def index
+      @articles = Article.all
+    end
 
-  def new
-    @article = Article.new
-  end
+    def new
+      @article = Article.new
+    end
 
-  def edit
-    @article = Article.find(params[:id])
-  end
+    def edit
+    end
 
-  def destroy
-    @article = Article.find(params[:id])
-    @article.destroy
-    redirect_to articles_path
-  end
-
-  def create
-    @article = Article.new(params.require(:article).permit(:title, :description))
-    if @article.save
-      flash[:notice] = 'Article was created successfully.'
+    def destroy
+      @article.destroy
       redirect_to articles_path
-    else
-      render 'new'
+    end
+
+    def create
+      @article = Article.new(articles_params)
+      if @article.save
+        flash[:notice] = 'Article was created successfully.'
+        redirect_to articles_path
+      else
+        render 'new'
+      end
+    end
+
+    def update
+      if @article.update(article_params)
+        flash[:notice] = 'Article was updated successfully.'
+        redirect_to @article
+    end
+
+    private
+    def set_articles
+      @article = Article.find(params[:id])
+    end
+
+    def article_params
+      params.require(:article).permit(:title, :description)
     end
   end
 end
