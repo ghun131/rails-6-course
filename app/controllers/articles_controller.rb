@@ -21,6 +21,7 @@ class ArticlesController < ApplicationController
 
     def create
       @article = Article.new(article_params)
+      puts 'HIT 1'
       if @article.save
         flash[:notice] = 'Article was created successfully.'
         redirect_to articles_path
